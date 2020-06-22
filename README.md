@@ -1,13 +1,15 @@
 # Rust-OpenCL-Tutorial
 
 # Introduction:
-Welcome to this OpenCL guide for the programming language Rust. My name is Harm Meyer I’m a third year technical informatics student at Avans Hogeschool in 's Hertogenbosch. I want to show you how you can use OpenCL in rust. This guide was written because of the lack of guides online that help with programming. Because of that this guide will mostly be a programming guide, not a guide that goes in depth on the inner workings of OpenCL.
+Welcome to this OpenCL guide for the programming language Rust. My name is Harm Meyer I’m a third year technical informatics student at Avans Hogeschool in 's Hertogenbosch. I want to show you how you can use OpenCL in Rust. This guide was written because of the lack of guides online that help with programming. Because of that this guide will mostly be a programming guide, not a guide that goes in depth on the inner workings of OpenCL.
 
-In this git page you will find 5 pieces of example code. We are going to use these to learn about OpenCL, please open the code corresponding to the tutorial you are currently at. please note that these tutorials will be written in Rust, but can also be used in any other programming language that supports OpenCL. This is because most implementations of OpenCL follow the same steps. Furthermore, for this tutorial basic knowledge of the rust programming language is expected. The niveau I expect you to be on is where you know what cargo is, what a cargo.toml is and how basic rust syntax works. Sometimes I will explain things that might be new to you.
+In this git page you will find 5 pieces of example code. We are going to use these to learn about OpenCL, please open the code corresponding to the tutorial you are currently at. please note that these tutorials will be written in Rust, but can also be used in any other programming language that supports OpenCL. This is because most implementations of OpenCL follow the same steps. Furthermore, for this tutorial basic knowledge of the Rust programming language is expected. The niveau I expect you to be on is where you know what cargo is, what a cargo. toml is and how basic Rust syntax works. Sometimes I will explain things that might be new to you.
 
 
 
-Finally it is expected that you know how OpenCL works. The only thing this tutorial will do is describe the code needed to use it. Some of the terms I expect you to know are: Kernel, Work sizes and global-, local-, and private memory. If you do not know about this I highly recommend the videos of David Gohara: [Youtube Playlist Link](https://www.youtube.com/watch?v=QA483lIvL-4&list=PLTfYiv7-a3l7mYEdjk35wfY-KQj5yVXO2)
+Finally it is expected that you know how OpenCL works. The only thing this tutorial will do is describe the code needed to use it. Some of the terms I expect you to know are: Kernel, Work sizes and global-, local-, and private memory. If you do not know about this I highly recommend the videos of David Gohara: [YouTube Playlist Link](https://www.youtube.com/watch?v=QA483lIvL-4&list=PLTfYiv7-a3l7mYEdjk35wfY-KQj5yVXO2)
+
+At the end of this ReadMe you can find my planning and preparations.
 
 ----------------------------------------------------------------------------------------------------
 # Tutorial 1 - Basics
@@ -69,7 +71,7 @@ Now we want to add 6 to each of the vector entries. Normally we would do somethi
 		bananas[i] += 6;
 	}
 
-This is a sequential way to change the vector values. And it's this is a pretty simple/fast method for 64 values. But what if we want to change 640 or 6400 values. Now our simple for-loop is going to take a lot longer. To make sure our program runs as fast as it can we can use opencl for parrallel processing.
+This is a sequential way to change the vector values. And it's this is a pretty simple/fast method for 64 values. But what if we want to change 640 or 6400 values. Now our simple for-loop is going to take a lot longer. To make sure our program runs as fast as it can we can use OpenCL for parrallel processing.
 
 To do this we will first write a piece of kernel code. This is going to be the SRC variable at the top of our code. 
 
@@ -121,9 +123,9 @@ global_work_size: the work size, in this case (and in most cases) the same the s
 arg: the first argument of our "add" function.
 
 ##part 6 - running and reading from the kernel
-Next we want to run our kernel code and read the values from it. In Rust we need to run this code in an "unsafe" block. Because this code is not memory safe! for more information you could go to: https://doc.rust-lang.org/book/ch19-01-unsafe-rust.html
+Next we want to run our kernel code and read the values from it. In Rust we need to run this code in an "unsafe" block. Because this code is not memory safe! for more information you could go to: https://doc.Rust-lang.org/book/ch19-01-unsafe-Rust.html
     
-To run the kernel we'll have to enqueue it:
+To run the kernel we'll have to en-queue it:
  
 	unsafe
 	{
@@ -219,9 +221,9 @@ To actually use all these object we are going to make the kernel object.
 		.arg(&buff_apples)
 		.build()?;`
 
-note: I use the arg method two times for the first and second argument needed for the add() function in the source of the kernel. And finally we simply enqueue the kernel and read the values from the buffers.
+note: I use the arg method two times for the first and second argument needed for the add() function in the source of the kernel. And finally we simply queue the kernel and read the values from the buffers.
 
-    //enqueue the kernel
+    //en-queue the kernel
     unsafe
     {
         kernel.cmd().enq();
@@ -258,7 +260,7 @@ Within our kernel we can work with up to 3 dimensions. These dimensions could be
 In OpenCL it works a bit differently. For this example we will go up to a 2d array to keep it somewhat simple. But do note that this could also work with 3d arrays. To index the value we want or to store a value in a 2d array we can also use a 1d array that has the size of x_range * y_range. (After all a 2d array is nothing but pointers that point to other arrays that have more pointers) To 
 
 ## part 1 - storing 2d array in a 1d array
-To create a 2d array that countains all it's values in a 1d square array i created a simple function.
+To create a 2d array that contains all it's values in a 1d square array i created a simple function.
 
 	fn create_countup_vector2d(size : usize, doDebug : bool) -> Vec<i32>
 	{    
@@ -316,7 +318,7 @@ Note: the size of this vector is now MAX_SIZE * MAX_SIZE.
         .copy_host_slice(&apples)
         .build()?;
 
-Next we're going to create our kernel weirdly named salad, because I’m hungry. Again note that our global_work_size is MAX_SIZE * MAX_SIZE. In rust this is done by the SpatialDims object of the ocl library. Now our kernel knows it has two working dimensions.
+Next we're going to create our kernel weirdly named salad, because I’m hungry. Again note that our global_work_size is MAX_SIZE * MAX_SIZE. In Rust this is done by the SpatialDims object of the ocl library. Now our kernel knows it has two working dimensions.
 
     let salad = Kernel::builder()
         .program(&program)
@@ -402,10 +404,10 @@ First we're going to initialize a sum and global_id variable. Next each instance
 		.
 	n => 2n + 2n+1
 
-All these values get stored in the temp value. After that we loop over each index of the temp value and add those values. (this might not be an ideal sollution but it's more the idea of how __local works) 
+All these values get stored in the temp value. After that we loop over each index of the temp value and add those values. (this might not be an ideal solution but it's more the idea of how __local works) 
 
 ## Part 2 - Barriers
-Sometimes you need to syncronise all the threads running. We can do this by using a barrier. In the kernel code above we can see the line: 
+Sometimes you need to synchronize all the threads running. We can do this by using a barrier. In the kernel code above we can see the line: 
 
    barrier(CLK_LOCAL_MEM_FENCE);`
 
@@ -413,7 +415,7 @@ This barrier waits for all threads to reach the same position and flushed the lo
 
 That was all for tutorial 4
 
-# Tutorial 5 - Local and Global workspaces
+# Tutorial 5 - Local and Global work spaces
 Up until now we've always used the get_global_id() function to get the index of an array value. Now I would like to introduce you to the world of get_local_id(). We can set a local workspace to split the global workspace. This means we get a second index which is very helpful for splitting work. 
 
 Normally we would have a bunch of global_id's like this when we set a work size of 24
@@ -437,7 +439,7 @@ In the example code you can see i have added:
         
 	.local_work_size(LOCAL_WORK_SIZE) //LOCAL_WORK_SIZE = 4 
 
-This will add a local worksize of 4.
+This will add a local work size of 4.
 
 Now if we run this code and check the values of our buffers we can see: 
 
@@ -457,3 +459,26 @@ The value of buff_apples is:
 This also makes sense because we index on the global_id, so all the values that are of the array are filled! The value loops through the values 0 to 3 because we have a local_size of 4. 
 
 That was all for tutorial 5
+
+
+# Preparations
+## Time-path
+To Create this tutorial i have made a planning:
+1) Study OpenCL and its components
+2) Learn how to integrate OpenCL with Rust, what libraries to use etc...
+3) Decide what parts of OpenCL i want to cover
+4) Create pieces of example code that is very simple for a user
+5) Write out tutorials starting at the tutorial 1 and going up
+
+## Result
+The result should be something like a document that describes the code i've written. This code should touch on the basics of OpenCL but never go to in depth. 
+
+## Actions
+- Download OpenCL
+- Make OpenCL work for Rust
+	- decide on which libraries to use
+- Create the tutorials needed to cover the basics
+- Create the guide that describes the tutorials
+
+## Reflection
+Working is OpenCL is a lot of fun, it challenges you to think outside the box to create parallel running code. It's also surprisingly easy to implement some fast features for your code and it's something i will definetly use in the future.
